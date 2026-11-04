@@ -1,10 +1,12 @@
 import mongoose from "mongoose";
 import Product from "../models/product.js";
+import User from "../models/user.js"
 
 export const addProduct = async (req, res) => {
   try {
     console.log(req.id);
     const existingUser = await User.findById(req.id)
+
     if (!existingUser) {
         return res.status(401).json({status: false, message: "Unauthorized"})
     }
@@ -20,6 +22,7 @@ export const addProduct = async (req, res) => {
       price,
       image,
       stock,
+      createdBy: req.id
     });
 
     return res
@@ -47,7 +50,7 @@ export const getAllProduct = async (req, res) => {
         product,
         length: product.length,
       });
-  } catch (error) {
+  } catch (error) {+
     console.log(error);
     return res.status(500).json({ status: false, message: error.message });
   }
@@ -116,13 +119,21 @@ export const deleteProduct = async (req, res) => {
             .json({status: false, message: "Invalid product id"})
         }
 
-        const product = await Product.findByIdAndDelete(id);
+        const product = await Product.findById(id);
 
         if (!product) {
             return res
             .status(404)
             .json({status: false, message:  "Product not Found"})
         }
+
+        if (product.createdBy?.toString() !== String(req.id)) {
+            return res
+            .status(401)
+            .json({status: false, message: "Not Authorized to delete this product"})
+        }
+
+        await product.deleteOne()
 
         return res
         .status(200)

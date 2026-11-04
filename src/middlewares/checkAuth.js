@@ -4,11 +4,13 @@ import { envConfig } from '../config/envConfig.js'
 export const checkAuth = (req, res, next) => {
     try {
         const header = req.headers.authorization
+        console.log(header);
+        
         if (!header) {
             res.status(401)
                 .json({ status: false, message: "Token not Found" })
         }
-        const token = header.split("Bearer  ")[1]
+        const token = header.split("Bearer ")[1]
         console.log(token);
 
         try {

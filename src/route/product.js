@@ -8,6 +8,6 @@ router.post("/", checkAuth ,addProduct);
 router.get("/", getAllProduct);
 router.get("/:id", getSingleProduct);
 router.patch("/:id", updateProduct)
-router.delete("/:id", deleteProduct)
+router.delete("/:id", checkAuth, deleteProduct)
 
 export default router;
