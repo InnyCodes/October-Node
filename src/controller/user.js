@@ -3,7 +3,6 @@ import User from "../models/user.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { userODM } from "../odm/user.js";
-import user from "../models/user.js";
 import { envConfig } from "../config/envConfig.js";
 
 
@@ -81,5 +80,20 @@ export const LogInUser = async (req, res) => {
     } catch (error) {
         console.log(error);
         return res.status(500).json({ status: false, message: error.message })
+    }
+}
+
+export const isAuth = async (req,res) => {
+    try {
+        const existingUser = await User.findById(req.id)
+
+        if (!existingUser) {
+            return res.status(401).json({status: false, message: error.message})
+        }
+
+        return res.status(200).json({status: true, message: "successful"})
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({status: false, message: error.message})
     }
 }

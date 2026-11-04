@@ -3,6 +3,11 @@ import Product from "../models/product.js";
 
 export const addProduct = async (req, res) => {
   try {
+    console.log(req.id);
+    const existingUser = await User.findById(req.id)
+    if (!existingUser) {
+        return res.status(401).json({status: false, message: "Unauthorized"})
+    }
     const { title, description, price, image, stock } = req.body;
     if (!title || !description || !price || !image || !stock) {
       return res
@@ -132,3 +137,4 @@ export const deleteProduct = async (req, res) => {
         .json({status: false, message: error.message})
     }
 }
+
