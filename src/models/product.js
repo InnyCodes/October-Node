@@ -33,9 +33,9 @@ const productSchema = new mongoose.Schema({
         min: [1, "stock cannot be less than 1"],
         max: [1000, "Price cannot be Greater than 1000"]
     },
-    createdBy: {
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        ref: "user",
         required: true,
     }
 })

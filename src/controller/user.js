@@ -9,9 +9,9 @@ import { envConfig } from "../config/envConfig.js";
 export const registerUser = async (req, res) => {
     const saltRounds = Number(envConfig.bcryprt.saltRounds)
     try {
-        const { firstName, lastName, email, password } = req.body;
+        const { firstName, lastName, email, password, role } = req.body;
 
-        if (!firstName || !lastName || !email || !password) {
+        if (!firstName || !lastName || !email || !password ) {
             return res
                 .status(400)
                 .json({ status: false, message: "All Field are required" });
@@ -30,6 +30,7 @@ export const registerUser = async (req, res) => {
             lastName,
             email,
             password: hashedPassword,
+            role
         });
         return res.status(201).json({
             status: true,
@@ -67,7 +68,7 @@ export const LogInUser = async (req, res) => {
             .json({ status: false, message: "Invalid credentials" });
         }
         const token = jwt.sign(
-                {data: existingUser._id},
+                {id: existingUser._id, role: existingUser.role},
                 envConfig.jwt.jwtSecretKey,
                 {expiresIn: envConfig.jwt.expiresIn},
         )
