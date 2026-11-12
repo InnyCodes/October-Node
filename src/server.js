@@ -9,6 +9,8 @@ const port = envConfig.port;
 const server = express()
 server.use(cors());
 
+server.use("/uploads", express.static("uploads"));
+
 server.use(json());
 server.use("/product", productRoute)
 server.use("/auth", userRoute)
